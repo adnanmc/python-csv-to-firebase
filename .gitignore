@@ -1,0 +1,7 @@
+.vscode
+virtualenv/*
+!virtualenv/requirements.txt
+.DS_Store
+._.DS_Store
+env.py
+firebase-service-account/
