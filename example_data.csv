@@ -1,0 +1,8 @@
+id,Time,First Name,Last Name,Email,Age,Zipcode,Images,Final Images,Gif,Email Sent,Data Uploaded
+cd6f5319-da42-4439-b9db-5099a7e0024e,2017-10-23 21:00:51.065682,Chance,Smith,test@test.com,31,38305,"['photo-0__cd6f5319-da42-4439-b9db-5099a7e0024e.jpg'
+ 'photo-1__cd6f5319-da42-4439-b9db-5099a7e0024e.jpg'
+ 'photo-2__cd6f5319-da42-4439-b9db-5099a7e0024e.jpg'
+ 'photo-3__cd6f5319-da42-4439-b9db-5099a7e0024e.jpg']","['./camera-shots/overlay-photo-0__cd6f5319-da42-4439-b9db-5099a7e0024e.jpg'
+ './camera-shots/overlay-photo-1__cd6f5319-da42-4439-b9db-5099a7e0024e.jpg'
+ './camera-shots/overlay-photo-2__cd6f5319-da42-4439-b9db-5099a7e0024e.jpg'
+ './camera-shots/overlay-photo-3__cd6f5319-da42-4439-b9db-5099a7e0024e.jpg']",5e1db903-5ed1-42d3-a4a3-3c34b30a21f9.gif,True,False

@@ -4,4 +4,5 @@ virtualenv/*
 .DS_Store
 ._.DS_Store
 env.py
+data.csv
 firebase-service-account/
