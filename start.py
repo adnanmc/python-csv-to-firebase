@@ -3,6 +3,7 @@ import pyrebase
 import csv
 import os
 import sys, json
+from datetime import date
 
 firebase = pyrebase.initialize_app(config)
 
@@ -56,6 +57,12 @@ with open(csvFile) as csv_in_file:
             writer.writerow(row)
             continue
 
+          # skip this row empty
+          if row[2] == '':
+            print ('first name was empty')
+            writer.writerow(row)
+            continue
+
           # only send one email per instance
           if sentOne == True:
             print ('already sent one - done practicly with csv')
@@ -71,27 +78,39 @@ with open(csvFile) as csv_in_file:
             print ('add 1 to left to send var')
             leftToSendCount +=1
 
-          ## get DataRow and add data to object
+          # start data class instance
           data = PhotoShootDataInstance()
 
+          # add data to object
           data.id =  str(row[0])
           data.date = str(row[1])
           data.fname = str(row[2])
           data.lname = str(row[3])
           data.email = str(row[4])
-          data.age = str(row[5])
+          data.birth = str(row[5])
           data.zipcode = str(row[6])
           data.venue = 'theLab'
           data.gender = 'male'
           data.race = 'white'
 
+          # validate birth year
+          print('date:')
+          print('date: '+data.birth)
+          if int(data.birth) < 1900:
+            date_object = date.today()
+            # get year from date object
+            year = date_object.strftime("%Y")
+            old = data.birth
+            data.birth = int(year)-int(data.birth)
+            print('birth year: form >> '+str(old)+' >> '+str(data.birth))
+
+          # ready data for Firebase
+          # source: https://stackoverflow.com/questions/10252010/serializing-python-object-instance-to-json
           json = json.dumps(data.__dict__)
           print(json)
           continue
 
-
-          # if has not been sent, send data to Firebase
-          # # push to firebase
+          # if has not been sent, send/push data to Firebase
           # sent = db.child("user").push(data)
           # print ('sent says: '+says)
           # if sent is True:
