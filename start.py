@@ -101,7 +101,6 @@ with open(csvFile) as csv_in_file:
             year = date_object.strftime("%Y")
             old = data.birth
             data.birth = int(year)-int(data.birth)
-            print('birth year: form >> '+str(old)+' >> '+str(data.birth))
 
 
           # if has not been sent, send/push data/json to Firebase
@@ -110,8 +109,9 @@ with open(csvFile) as csv_in_file:
           if isinstance(sent, dict):
             print('is dict')
             # update User Count in Firebase
-            usersCount = int(db.child("dashboard").child('usersCount').get())
-            db.child("dashboard").update({"usersCount": usersCount})
+            usersCount = db.child("dashboard").child("usersCount").get().val()
+            usersCount = int(usersCount) + 1
+            db.child("dashboard").update({"usersCount": int(usersCount)})
             sentCount += 1
             leftToSendCount -=1
             row[11] = 'True'
