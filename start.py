@@ -108,10 +108,6 @@ with open(csvFile) as csv_in_file:
           ## ??? there might be a better way to measure success
           if isinstance(sent, dict):
             print('is dict')
-            # update User Count in Firebase
-            usersCount = db.child("dashboard").child("usersCount").get().val()
-            usersCount = int(usersCount) + 1
-            db.child("dashboard").update({"usersCount": int(usersCount)})
             sentCount += 1
             leftToSendCount -=1
             row[11] = 'True'
