@@ -29,13 +29,13 @@ def doesUserExist(id):
 
 class PhotoShootDataInstance():
   def __init__(self):
-    # set id, name, email, age, zip, venue, gender
-    self.id = ''
+    # set id, name, email, age, zipcode, venue, gender, race
+    self._id = ''
     self.date = ''
     self.fname = ''
     self.lname = ''
     self.email = ''
-    self.age = ''
+    self.birth = 1900
     self.zipcode = ''
     self.venue = ''
     self.gender = ''
@@ -53,19 +53,18 @@ with open(csvFile) as csv_in_file:
 
           # skip first row
           if row[0] == 'id':
-            print ('first row, skip this guy')
             writer.writerow(row)
             continue
 
           # skip this row empty
+          ## ??? there might be a better way to see if row was empty
+          ## or how to check if all fields are ready/filled properly
           if row[2] == '':
-            print ('first name was empty')
             writer.writerow(row)
             continue
 
           # only send one email per instance
           if sentOne == True:
-            print ('already sent one - done practicly with csv')
             writer.writerow(row)
             continue
 
@@ -82,7 +81,7 @@ with open(csvFile) as csv_in_file:
           data = PhotoShootDataInstance()
 
           # add data to object
-          data.id =  str(row[0])
+          data._id =  str(row[0])
           data.date = str(row[1])
           data.fname = str(row[2])
           data.lname = str(row[3])
@@ -90,12 +89,12 @@ with open(csvFile) as csv_in_file:
           data.birth = str(row[5])
           data.zipcode = str(row[6])
           data.venue = 'theLab'
+          data.event = 'gov conf'
+          data.eventLoc = 37738 #gatlinburg by default
           data.gender = 'male'
           data.race = 'white'
 
           # validate birth year
-          print('date:')
-          print('date: '+data.birth)
           if int(data.birth) < 1900:
             date_object = date.today()
             # get year from date object
@@ -104,27 +103,26 @@ with open(csvFile) as csv_in_file:
             data.birth = int(year)-int(data.birth)
             print('birth year: form >> '+str(old)+' >> '+str(data.birth))
 
-          # ready data for Firebase
-          # source: https://stackoverflow.com/questions/10252010/serializing-python-object-instance-to-json
-          json = json.dumps(data.__dict__)
-          print(json)
-          continue
 
-          # if has not been sent, send/push data to Firebase
-          # sent = db.child("user").push(data)
-          # print ('sent says: '+says)
-          # if sent is True:
-          #   sentCount += 1
-          #   leftToSendCount -=1
-          #   row[10] = 'True'
-          #   writer.writerow(row)
-          #   sentOne = True
-          #   continue
-          # else:
-          #   print('Data did not send: '+email)
-          #   errorCount += 1
-          #   writer.writerow(row)
-          #   continue
+          # if has not been sent, send/push data/json to Firebase
+          sent = db.child("users").push(data.__dict__)
+          ## ??? there might be a better way to measure success
+          if isinstance(sent, dict):
+            print('is dict')
+            # update User Count in Firebase
+            usersCount = int(db.child("dashboard").child('usersCount').get())
+            db.child("dashboard").update({"usersCount": usersCount})
+            sentCount += 1
+            leftToSendCount -=1
+            row[11] = 'True'
+            writer.writerow(row)
+            sentOne = True
+            continue
+          else:
+            print('Data did not send (not dict): '+email)
+            errorCount += 1
+            writer.writerow(row)
+            continue
     os.rename('data-temp.csv',csvFile)
 
 print('CSV run through and updated.')
